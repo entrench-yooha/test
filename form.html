@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>피드백 폼</title>
+</head>
+<body>
+    <h1>피드백을 제출해 주세요</h1>
+    <form action="http://localhost:5677/webhook/test" method="POST">
+        <input type="text" name="name" placeholder="이름" required /><br><br>
+        <input type="email" name="email" placeholder="이메일" required /><br><br>
+        <textarea name="message" placeholder="메시지" required></textarea><br><br>
+        <button type="submit">제출</button>
+    </form>
+</body>
+</html>
