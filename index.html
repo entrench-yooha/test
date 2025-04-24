@@ -8,10 +8,22 @@
 <body>
     <h1>피드백을 제출해 주세요</h1>
     <form action="http://localhost:5677/webhook/test" method="POST">
-        <input type="text" name="name" placeholder="이름" required /><br><br>
-        <input type="email" name="email" placeholder="이메일" required /><br><br>
-        <textarea name="message" placeholder="메시지" required></textarea><br><br>
-        <button type="submit">제출</button>
+      <label for="utm_source">UTM Source (필수):</label><br>
+      <input type="text" id="utm_source" name="utm_source" required><br><br>
+    
+      <label for="utm_medium">UTM Medium (필수):</label><br>
+      <input type="text" id="utm_medium" name="utm_medium" required><br><br>
+    
+      <label for="utm_campaign">UTM Campaign (필수):</label><br>
+      <input type="text" id="utm_campaign" name="utm_campaign" required><br><br>
+    
+      <label for="utm_term">UTM Term (선택):</label><br>
+      <input type="text" id="utm_term" name="utm_term"><br><br>
+    
+      <label for="utm_content">UTM Content (선택):</label><br>
+      <input type="text" id="utm_content" name="utm_content"><br><br>
+    
+      <button type="submit">제출</button>
     </form>
 </body>
 </html>
