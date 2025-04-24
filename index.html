@@ -4,31 +4,209 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>utm builder Test</title>
+	<style>
+	.required {
+	color: red;
+	font-weight: bold;
+	}
+	</style>
 </head>
 <body>
-    <h1>UTM 링크 생성</h1>
-    
-    <form action="http://localhost:5677/webhook/test" method="POST">
-      <label for="page_url">Page URL (필수):</label><br>
-      <input type="text" id="page_url" name="page_url" required placeholder="https://example.com"><br><br>
-        
-      <label for="utm_source">UTM Source (필수):</label><br>
-      <input type="text" id="utm_source" name="utm_source" required placeholder="google"><br><br>
-    
-      <label for="utm_medium">UTM Medium (필수):</label><br>
-      <input type="text" id="utm_medium" name="utm_medium" required placeholder="cpc"><br><br>
-    
-      <label for="utm_campaign">UTM Campaign (필수):</label><br>
-      <input type="text" id="utm_campaign" name="utm_campaign" required placeholder="spring_sale"><br><br>
-    
-      <label for="utm_term">UTM Term (선택):</label><br>
-      <input type="text" id="utm_term" name="utm_term" placeholder="shoes"><br><br>
-    
-      <label for="utm_content">UTM Content (선택):</label><br>
-      <input type="text" id="utm_content" name="utm_content" placeholder="banner_ad_1"><br><br>
-    
-      <button type="submit">제출</button>
-    </form>
+	<div class="dv1">
+	<div class="dv2">
+		<h1>UTM 링크 생성</h1>
+		
+		<!-- 조건 설명을 위한 표 -->
+		<table border="1" cellpadding="5" style="width:100%; border-collapse: collapse;">
+			<thead>
+				<tr>
+					<th colspan="2">UTM 네이밍 규칙</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>공통 규칙</td>
+					<td>
+						<ul>
+							<li>띄어쓰기 금지</li>
+							<li>구분자: 언더스코어('_') 및 하이픈('-') 사용</li>
+							<li>영문 네이밍: 소문자만 사용</li>
+							<li>특수문자 사용 금지 (&, ?, #, ., /, \ 등)</li>
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<td>캠페인 규칙</td>
+					<td>
+						<ul>
+							<li>구성: 날짜_광고타입_캠페인목표_기획전종류_상품카테고리_광고타겟_소재타입_기기카테고리</li>
+							<li>없으면 'N'으로 채움</li>
+							<li><span class="required">필수 항목: 날짜, 광고타입, 기기카테고리</span></li>
 
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<td>콘텐츠 규칙</td>
+					<td>
+						<ul>
+							<li>목표행동, 추가기입사항, 버전 중 하나라도 입력되면 해당 값으로 조합</li>
+							<li>입력되지 않으면 'N'으로 처리</li>
+						</ul>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<br>
+	</div>
+	
+	<div class="dv3">
+		<!-- Form 시작 -->
+	  <form action="http://localhost:5677/webhook/test" method="POST" onsubmit="return combineUTMValues()">
+		<!-- 기본 필수 항목 -->
+		<label for="page_url">Page URL <span class="required">(필수)</span>:</label>
+		<input type="text" id="page_url" name="page_url" required placeholder="https://example.com" oninput="updateFinalURL()"><br><br>
+
+		<label for="utm_source">UTM Source <span class="required">(필수)</span>:</label>
+		<input type="text" id="utm_source" name="utm_source" required placeholder="google" oninput="updateFinalURL()"><br><br>
+
+		<label for="utm_medium">UTM Medium <span class="required">(필수)</span>:</label>
+		<input type="text" id="utm_medium" name="utm_medium" required placeholder="cpc" oninput="updateFinalURL()"><br><br>
+
+		<!-- UTM Campaign 구성 -->
+		<fieldset style="border:1px solid #ccc; padding:10px;">
+		  <legend>UTM Campaign 구성</legend>
+
+		  <label>날짜 <span class="required">(필수)</span>:</label>
+		  <input type="text" id="campaign_date" placeholder="20250424" oninput="updateFinalURL()" required><br><br>
+
+		  <label>광고타입 <span class="required">(필수)</span>:</label>
+		  <input type="text" id="ad_type" placeholder="display" oninput="updateFinalURL()" required><br><br>
+
+		  <label>캠페인목표:</label>
+		  <input type="text" id="campaign_goal" placeholder="awareness" oninput="updateFinalURL()"><br><br>
+
+		  <label>기획전종류:</label>
+		  <input type="text" id="event_type" placeholder="spring_sale" oninput="updateFinalURL()"><br><br>
+
+		  <label>상품카테고리:</label>
+		  <input type="text" id="product_category" placeholder="shoes" oninput="updateFinalURL()"><br><br>
+
+		  <label>광고타겟:</label>
+		  <input type="text" id="ad_target" placeholder="women" oninput="updateFinalURL()"><br><br>
+
+		  <label>소재타입:</label>
+		  <input type="text" id="creative_type" placeholder="banner" oninput="updateFinalURL()"><br><br>
+
+		  <label>기기카테고리 <span class="required">(필수)</span>:</label>
+		  <input type="text" id="device_type" placeholder="mobile" oninput="updateFinalURL()" required><br><br>
+		</fieldset>
+
+		<!-- UTM Content 구성 -->
+		<fieldset style="border:1px solid #ccc; padding:10px;">
+		  <legend>UTM Content 구성</legend>
+
+		  <label>목표행동:</label>
+		  <input type="text" id="content_action" placeholder="click" oninput="updateFinalURL()"><br><br>
+
+		  <label>추가기입사항:</label>
+		  <input type="text" id="content_detail" placeholder="120X240-vertical" oninput="updateFinalURL()"><br><br>
+
+		  <label>버전:</label>
+		  <input type="text" id="content_version" placeholder="v1" oninput="updateFinalURL()"><br><br>
+		</fieldset>
+
+		<!-- UTM Term 입력 -->
+		<label for="utm_term">UTM Term (선택):</label>
+		<input type="text" id="utm_term" name="utm_term" placeholder="shoes" oninput="updateFinalURL()"><br><br>
+
+		<!-- 숨겨진 필드 (서버 제출용) -->
+		<input type="hidden" id="utm_campaign" name="utm_campaign" required>
+		<input type="hidden" id="utm_content" name="utm_content">
+
+		<!-- 최종 URL 출력 -->
+		<label for="final_url">최종 URL:</label>
+		<input type="text" id="final_url" disabled style="width:100%; font-family:monospace;">
+
+		<button type="submit">제출</button>
+	  </form>
+
+		<script>
+			function getValueOrN(id) {
+				const value = document.getElementById(id).value.trim();
+				return value === "" ? "N" : value;
+			}
+
+			function combineUTMValues() {
+				// 필수 항목 체크
+				const requiredIds = ["campaign_date", "ad_type", "device_type"];
+				for (let id of requiredIds) {
+					if (document.getElementById(id).value.trim() === "") {
+						alert("utm_campaign 필수 항목을 입력해주세요.");
+						return false;
+					}
+				}
+
+				// utm_campaign 조합
+				const campaignParts = [
+					getValueOrN("campaign_date"),
+					getValueOrN("ad_type"),
+					getValueOrN("campaign_goal"),
+					getValueOrN("event_type"),
+					getValueOrN("product_category"),
+					getValueOrN("ad_target"),
+					getValueOrN("creative_type"),
+					getValueOrN("device_type")
+				];
+				document.getElementById("utm_campaign").value = campaignParts.join("_");
+
+				// utm_content 조합
+				const contentParts = [
+					getValueOrN("content_action"),
+					getValueOrN("content_detail"),
+					getValueOrN("content_version")
+				];
+				document.getElementById("utm_content").value = contentParts.join("_");
+
+				// 최종 URL 업데이트
+				updateFinalURL();
+
+				return true;
+			}
+
+			function updateFinalURL() {
+				const pageUrl = document.getElementById("page_url").value.trim();
+				const utmSource = document.getElementById("utm_source").value.trim();
+				const utmMedium = document.getElementById("utm_medium").value.trim();
+				
+				// 실시간 utm_campaign 조합
+				const utmCampaign = [
+					getValueOrN("campaign_date"),
+					getValueOrN("ad_type"),
+					getValueOrN("campaign_goal"),
+					getValueOrN("event_type"),
+					getValueOrN("product_category"),
+					getValueOrN("ad_target"),
+					getValueOrN("creative_type"),
+					getValueOrN("device_type")
+				].join("_");
+
+				const utmContent = [
+					getValueOrN("content_action"),
+					getValueOrN("content_detail"),
+					getValueOrN("content_version")
+				].join("_");
+				const utmTerm = document.getElementById("utm_term").value.trim();
+
+				let finalURL = `${pageUrl}?utm_source=${utmSource}&utm_medium=${utmMedium}&utm_campaign=${utmCampaign}`;
+
+				if (utmContent && utmContent !== "N") finalURL += `&utm_content=${utmContent}`;
+				if (utmTerm) finalURL += `&utm_term=${utmTerm}`;
+
+				document.getElementById("final_url").value = finalURL;
+			}
+		</script>
+	</div>
+	</div>
 </body>
 </html>
