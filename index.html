@@ -200,7 +200,7 @@
 
 				let finalURL = `${pageUrl}?utm_source=${utmSource}&utm_medium=${utmMedium}&utm_campaign=${utmCampaign}`;
 
-				if (utmContent && utmContent !== "N") finalURL += `&utm_content=${utmContent}`;
+				if (utmContent && utmContent !== "N_N_N") finalURL += `&utm_content=${utmContent}`;
 				if (utmTerm) finalURL += `&utm_term=${utmTerm}`;
 
 				document.getElementById("final_url").value = finalURL;
