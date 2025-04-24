@@ -153,12 +153,15 @@
                 getValueOrN("creative_type"),
                 getValueOrN("device_type")
             ].join("_");
+            document.getElementById("utm_campaign").value = utmCampaign;
 
             const utmContent = [
                 getValueOrN("content_action"),
                 getValueOrN("content_detail"),
                 getValueOrN("content_version")
             ].join("_");
+            document.getElementById("utm_content").value = utmContent;
+			
             const utmTerm = document.getElementById("utm_term").value.trim();
 
             let finalURL = `${pageUrl}?utm_source=${utmSource}&utm_medium=${utmMedium}&utm_campaign=${utmCampaign}`;
