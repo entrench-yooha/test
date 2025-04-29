@@ -94,10 +94,83 @@
                 <input id="shortUrlInput" readonly style="width:100%; font-family:monospace;">
                 <button type="button" onclick="copyLink()">📋 복사</button>
             </div>
+			<table id="historyTable" border="1">
+			  <thead>
+				<tr>
+				  <th>생성일시</th>
+				  <th>페이지 URL</th>
+				  <th>UTM Source</th>
+				  <th>UTM Medium</th>
+				  <th>UTM Campaign</th>
+				  <th>UTM Content</th>
+				  <th>최종 URL</th>
+				  <th>Short URL</th>
+				</tr>
+			  </thead>
+			  <tbody>
+				<!-- 데이터가 여기에 추가될 것 -->
+			  </tbody>
+			</table>
         </div>
     </div>
+	
+	<script id="table_build">
+	async function fetchHistoryData() {
+	  try {
+		const response = await fetch('https://raw.githubusercontent.com/entrench-yooha/test/main/test/form/n8n-builder.json');
 
-    <script>
+		if (!response.ok) {
+		  console.warn('히스토리 파일 없음 또는 불러오기 실패');
+		  return [];
+		}
+
+		const data = await response.json();
+
+		if (!Array.isArray(data)) {
+		  console.warn('히스토리 데이터 형식 오류');
+		  return [];
+		}
+
+		return data;
+	  } catch (error) {
+		console.warn('히스토리 데이터 로딩 실패(파일 없음 가능)', error);
+		return [];
+	  }
+	}
+
+	async function renderHistoryTable() {
+	  const tableBody = document.getElementById('historyTable').querySelector('tbody');
+	  tableBody.innerHTML = ''; // 기존 행 초기화
+
+	  const data = await fetchHistoryData();
+
+	  if (data.length === 0) {
+		console.log('표시할 히스토리 데이터 없음');
+		return;
+	  }
+
+	  data.forEach(item => {
+		const row = document.createElement('tr');
+		row.innerHTML = `
+		  <td><a href="${item.page_url}" target="_blank">${item.page_url}</a></td>
+		  <td>${item.utm_source || ''}</td>
+		  <td>${item.utm_medium || ''}</td>
+		  <td>${item.utm_campaign || ''}</td>
+		  <td>${item.utm_content || ''}</td>
+		  <td><a href="${item.final_url}" target="_blank">${item.final_url}</a></td>
+		  <td><a href="${item.short_url}" target="_blank">${item.short_url}</a></td>
+		  <td>${item.created_at || ''}</td>
+		`;
+		tableBody.appendChild(row);
+	  });
+	}
+
+	window.addEventListener('DOMContentLoaded', renderHistoryTable);
+
+	</script>
+
+
+    <script id="set_webhook">
         function getValueOrN(id) {
             const value = document.getElementById(id).value.trim();
             return value === "" ? "N" : value;
