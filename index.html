@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,15 +10,64 @@
             color: red;
             font-weight: bold;
         }
+
         #responseContainer {
             display: none;
             margin-top: 20px;
         }
     </style>
 </head>
+
 <body>
     <div class="dv1">
         <div class="dv2">
+            <h1>UTM 링크 생성</h1>
+
+            <!-- 조건 설명을 위한 표 -->
+            <table border="1" cellpadding="5" style="width:100%; border-collapse: collapse;">
+                <thead>
+                    <tr>
+                        <th colspan="2">UTM 네이밍 규칙</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>공통 규칙</td>
+                        <td>
+                            <ul>
+                                <li>띄어쓰기 금지</li>
+                                <li>구분자: 언더스코어('_') 및 하이픈('-') 사용</li>
+                                <li>영문 네이밍: 소문자만 사용</li>
+                                <li>특수문자 사용 금지 (&, ?, #, ., /, \ 등)</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>캠페인 규칙</td>
+                        <td>
+                            <ul>
+                                <li>구성: 날짜_광고타입_캠페인목표_기획전종류_상품카테고리_광고타겟_소재타입_기기카테고리</li>
+                                <li>없으면 'N'으로 채움</li>
+                                <li><span class="required">필수 항목: 날짜, 광고타입, 기기카테고리</span></li>
+
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>콘텐츠 규칙</td>
+                        <td>
+                            <ul>
+                                <li>목표행동, 추가기입사항, 버전 중 하나라도 입력되면 해당 값으로 조합</li>
+                                <li>입력되지 않으면 'N'으로 처리</li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <br>
+        </div>
+
+        <div class="dv3">
             <h1>UTM 링크 생성</h1>
             <form id="utmForm">
                 <!-- 기본 필수 항목 -->
@@ -94,64 +144,64 @@
                 <input id="shortUrlInput" readonly style="width:100%; font-family:monospace;">
                 <button type="button" onclick="copyLink()">📋 복사</button>
             </div>
-			<table id="historyTable" border="1">
-			  <thead>
-				<tr>
-				  <th>생성일시</th>
-				  <th>페이지 URL</th>
-				  <th>UTM Source</th>
-				  <th>UTM Medium</th>
-				  <th>UTM Campaign</th>
-				  <th>UTM Content</th>
-				  <th>최종 URL</th>
-				  <th>Short URL</th>
-				</tr>
-			  </thead>
-			  <tbody>
-				<!-- 데이터가 여기에 추가될 것 -->
-			  </tbody>
-			</table>
+            <table id="historyTable" border="1">
+                <thead>
+                    <tr>
+                        <th>생성일시</th>
+                        <th>페이지 URL</th>
+                        <th>UTM Source</th>
+                        <th>UTM Medium</th>
+                        <th>UTM Campaign</th>
+                        <th>UTM Content</th>
+                        <th>최종 URL</th>
+                        <th>Short URL</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- 데이터가 여기에 추가될 것 -->
+                </tbody>
+            </table>
         </div>
     </div>
-	
-	<script id="table_build">
-	async function fetchHistoryData() {
-	  try {
-		const response = await fetch('https://raw.githubusercontent.com/entrench-yooha/test/main/test/form/n8n-builder.json');
 
-		if (!response.ok) {
-		  console.warn('히스토리 파일 없음 또는 불러오기 실패');
-		  return [];
-		}
+    <script id="table_build">
+        async function fetchHistoryData() {
+            try {
+                const response = await fetch('https://raw.githubusercontent.com/entrench-yooha/test/main/test/form/n8n-builder.json');
 
-		const data = await response.json();
+                if (!response.ok) {
+                    console.warn('히스토리 파일 없음 또는 불러오기 실패');
+                    return [];
+                }
 
-		if (!Array.isArray(data)) {
-		  console.warn('히스토리 데이터 형식 오류');
-		  return [];
-		}
+                const data = await response.json();
 
-		return data;
-	  } catch (error) {
-		console.warn('히스토리 데이터 로딩 실패(파일 없음 가능)', error);
-		return [];
-	  }
-	}
+                if (!Array.isArray(data)) {
+                    console.warn('히스토리 데이터 형식 오류');
+                    return [];
+                }
 
-	async function renderHistoryTable() {
-	  const tableBody = document.getElementById('historyTable').querySelector('tbody');
-	  tableBody.innerHTML = ''; // 기존 행 초기화
+                return data;
+            } catch (error) {
+                console.warn('히스토리 데이터 로딩 실패(파일 없음 가능)', error);
+                return [];
+            }
+        }
 
-	  const data = await fetchHistoryData();
+        async function renderHistoryTable() {
+            const tableBody = document.getElementById('historyTable').querySelector('tbody');
+            tableBody.innerHTML = ''; // 기존 행 초기화
 
-	  if (data.length === 0) {
-		console.log('표시할 히스토리 데이터 없음');
-		return;
-	  }
+            const data = await fetchHistoryData();
 
-	  data.forEach(item => {
-		const row = document.createElement('tr');
-		row.innerHTML = `
+            if (data.length === 0) {
+                console.log('표시할 히스토리 데이터 없음');
+                return;
+            }
+
+            data.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
 		  <td>${item.created_at || ''}</td>
 		  <td><a href="${item.page_url}" target="_blank">${item.page_url}</a></td>
 		  <td>${item.utm_source || ''}</td>
@@ -161,13 +211,12 @@
 		  <td><a href="${item.final_url}" target="_blank">${item.final_url}</a></td>
 		  <td><a href="${item.short_url}" target="_blank">${item.short_url}</a></td>
 		`;
-		tableBody.appendChild(row);
-	  });
-	}
+                tableBody.appendChild(row);
+            });
+        }
 
-	window.addEventListener('DOMContentLoaded', renderHistoryTable);
-
-	</script>
+        window.addEventListener('DOMContentLoaded', renderHistoryTable);
+    </script>
 
 
     <script id="set_webhook">
@@ -214,7 +263,7 @@
             const pageUrl = document.getElementById("page_url").value.trim();
             const utmSource = document.getElementById("utm_source").value.trim();
             const utmMedium = document.getElementById("utm_medium").value.trim();
-            
+
             // 실시간 utm_campaign 조합
             const utmCampaign = [
                 getValueOrN("campaign_date"),
@@ -234,7 +283,7 @@
                 getValueOrN("content_version")
             ].join("_");
             document.getElementById("utm_content").value = utmContent;
-			
+
             const utmTerm = document.getElementById("utm_term").value.trim();
 
             let finalURL = `${pageUrl}?utm_source=${utmSource}&utm_medium=${utmMedium}&utm_campaign=${utmCampaign}`;
@@ -263,7 +312,9 @@
                 // 4. n8n Webhook 호출
                 const res = await fetch("http://localhost:5677/webhook-test/a7943c49-150a-4d3b-a383-4f86557ad15f", {
                     method: "POST",
-                    headers: { "Content-Type": "application/json" },
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
                     body: JSON.stringify(jsonData)
                 });
 
@@ -273,7 +324,7 @@
                 if (result.short_url) {
                     document.getElementById("shortUrlInput").value = result.short_url;
                     document.getElementById("responseContainer").style.display = "block";
-					renderHistoryTable();
+                    renderHistoryTable();
                 } else {
                     alert("단축 URL 생성에 실패했습니다.");
                 }
@@ -293,4 +344,5 @@
         }
     </script>
 </body>
+
 </html>
