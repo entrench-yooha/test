@@ -152,6 +152,7 @@
 	  data.forEach(item => {
 		const row = document.createElement('tr');
 		row.innerHTML = `
+		  <td>${item.created_at || ''}</td>
 		  <td><a href="${item.page_url}" target="_blank">${item.page_url}</a></td>
 		  <td>${item.utm_source || ''}</td>
 		  <td>${item.utm_medium || ''}</td>
@@ -159,7 +160,6 @@
 		  <td>${item.utm_content || ''}</td>
 		  <td><a href="${item.final_url}" target="_blank">${item.final_url}</a></td>
 		  <td><a href="${item.short_url}" target="_blank">${item.short_url}</a></td>
-		  <td>${item.created_at || ''}</td>
 		`;
 		tableBody.appendChild(row);
 	  });
