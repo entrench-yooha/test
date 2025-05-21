@@ -1,13 +1,2 @@
-[
-  {
-    "page_url": "https://ga4sample.cafe24.com",
-    "utm_source": "n8n-cloude",
-    "utm_medium": "test",
-    "utm_term": "",
-    "utm_campaign": "20250521_utm-build_N_N_N_N_N_pc",
-    "utm_content": "N_N_N",
-    "final_url": "https://ga4sample.cafe24.com?utm_source=n8n-cloude&utm_medium=test&utm_campaign=20250521_utm-build_N_N_N_N_N_pc",
-    "short_url": "",
-    "created_at": ""
-  }
-]
+[{"page_url":"https://test.com","utm_source":"github","utm_medium":"test","utm_term":"","utm_campaign":"20250424_builder-test_N_N_N_N_N_pc","utm_content":"N_N_N","final_url":"https://test.com/?utm_source=github&utm_medium=test&utm_campaign=20250424_builder-test_N_N_N_N_N_pc","short_url":"https://bit.ly/3S3CceZ","created_at":"2025-04-24T06:39:01+0000"},{"page_url":"https://test.com","utm_source":"github","utm_medium":"test","utm_term":"","utm_campaign":"20250428_builder-test_N_N_N_N_N_pc","utm_content":"N_N_N","final_url":"https://test.com/?utm_source=github&utm_medium=test&utm_campaign=20250428_builder-test_N_N_N_N_N_pc","short_url":"https://bit.ly/3EFXL2o","created_at":"2025-04-28T01:39:10+0000"},{"page_url":"https://ga4sample.cafe24.com","utm_source":"n8n","utm_medium":"test","utm_term":"","utm_campaign":"20250429_utm-build_N_N_N_N_N_pc","utm_content":"N_N_N","final_url":"https://ga4sample.cafe24.com/?utm_source=n8n&utm_medium=test&utm_campaign=20250429_utm-build_N_N_N_N_N_pc","short_url":"https://bit.ly/3Sd9xEk","created_at":"2025-04-29T06:16:29+0000"},{"page_url":"https://ga4sample.cafe24.com","utm_source":"n8n","utm_medium":"test","utm_term":"","utm_campaign":"20250430_utm-build_final_N_N_N_test_mobile","utm_content":"link-build_N_N","final_url":"https://ga4sample.cafe24.com?utm_source=n8n&utm_medium=test&utm_campaign=20250430_utm-build_final_N_N_N_test_mobile&utm_content=link-build_N_N","short_url":"https://bit.ly/4jAc7R4","created_at":"2025-04-30T00:36:42+0000"}]
+
