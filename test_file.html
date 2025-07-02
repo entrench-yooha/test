@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GA4 교육 만족도 설문조사</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+        /* 커스텀 라디오 버튼 스타일 */
+        .rating-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            width: 60px;
+            height: 60px;
+            border: 2px solid #e5e7eb;
+            border-radius: 50%;
+            transition: all 0.2s ease-in-out;
+            font-weight: 700;
+            color: #4b5563;
+        }
+        .rating-input:hover + .rating-label {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+        .rating-input:checked + .rating-label {
+            background-color: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(59, 130, 246, 0.3);
+        }
+        .rating-label span {
+            font-size: 0.75rem;
+            margin-top: 2px;
+        }
+        .form-container {
+            animation: fadeIn 0.8s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
+
+    <div class="w-full max-w-2xl mx-auto bg-white p-8 sm:p-12 rounded-2xl shadow-2xl form-container">
+        <div class="text-center mb-12">
+            <i class="fas fa-chart-line text-5xl text-blue-500 mb-4"></i>
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-800">GA4 교육 만족도 설문조사</h1>
+            <p class="mt-3 text-gray-600">교육 과정 개선을 위한 소중한 의견을 들려주세요.</p>
+        </div>
+
+        <form id="surveyForm" class="space-y-10">
+            <!-- Question 1 -->
+            <div class="question-block">
+                <label class="block text-lg font-semibold text-gray-700 mb-4 text-center">1. 교육 내용의 <span class="text-blue-600">전반적인 만족도</span>는 어떠셨나요?</label>
+                <div class="flex justify-between items-center px-2">
+                    <span class="text-xs text-gray-500">매우 불만족</span>
+                    <div class="flex justify-center space-x-2 sm:space-x-4">
+                        <input type="radio" name="q1" value="1" id="q1-1" class="sr-only rating-input"><label for="q1-1" class="rating-label">1</label>
+                        <input type="radio" name="q1" value="2" id="q1-2" class="sr-only rating-input"><label for="q1-2" class="rating-label">2</label>
+                        <input type="radio" name="q1" value="3" id="q1-3" class="sr-only rating-input"><label for="q1-3" class="rating-label">3</label>
+                        <input type="radio" name="q1" value="4" id="q1-4" class="sr-only rating-input"><label for="q1-4" class="rating-label">4</label>
+                        <input type="radio" name="q1" value="5" id="q1-5" class="sr-only rating-input"><label for="q1-5" class="rating-label">5</label>
+                    </div>
+                    <span class="text-xs text-gray-500">매우 만족</span>
+                </div>
+            </div>
+
+            <!-- Question 2 -->
+            <div class="question-block">
+                <label class="block text-lg font-semibold text-gray-700 mb-4 text-center">2. 교육 내용이 <span class="text-blue-600">실무에 적용</span>하는 데 얼마나 도움이 될까요?</label>
+                <div class="flex justify-between items-center px-2">
+                    <span class="text-xs text-gray-500">전혀 안 됨</span>
+                    <div class="flex justify-center space-x-2 sm:space-x-4">
+                        <input type="radio" name="q2" value="1" id="q2-1" class="sr-only rating-input"><label for="q2-1" class="rating-label">1</label>
+                        <input type="radio" name="q2" value="2" id="q2-2" class="sr-only rating-input"><label for="q2-2" class="rating-label">2</label>
+                        <input type="radio" name="q2" value="3" id="q2-3" class="sr-only rating-input"><label for="q2-3" class="rating-label">3</label>
+                        <input type="radio" name="q2" value="4" id="q2-4" class="sr-only rating-input"><label for="q2-4" class="rating-label">4</label>
+                        <input type="radio" name="q2" value="5" id="q2-5" class="sr-only rating-input"><label for="q2-5" class="rating-label">5</label>
+                    </div>
+                    <span class="text-xs text-gray-500">매우 도움 됨</span>
+                </div>
+            </div>
+
+            <!-- Question 3 -->
+            <div class="question-block">
+                <label class="block text-lg font-semibold text-gray-700 mb-4 text-center">3. 강사님의 <span class="text-blue-600">강의 전달력</span>은 어떠셨나요?</label>
+                <div class="flex justify-between items-center px-2">
+                    <span class="text-xs text-gray-500">이해하기 어려움</span>
+                    <div class="flex justify-center space-x-2 sm:space-x-4">
+                        <input type="radio" name="q3" value="1" id="q3-1" class="sr-only rating-input"><label for="q3-1" class="rating-label">1</label>
+                        <input type="radio" name="q3" value="2" id="q3-2" class="sr-only rating-input"><label for="q3-2" class="rating-label">2</label>
+                        <input type="radio" name="q3" value="3" id="q3-3" class="sr-only rating-input"><label for="q3-3" class="rating-label">3</label>
+                        <input type="radio" name="q3" value="4" id="q3-4" class="sr-only rating-input"><label for="q3-4" class="rating-label">4</label>
+                        <input type="radio" name="q3" value="5" id="q3-5" class="sr-only rating-input"><label for="q3-5" class="rating-label">5</label>
+                    </div>
+                    <span class="text-xs text-gray-500">이해하기 쉬움</span>
+                </div>
+            </div>
+            
+            <!-- Question 4: Free-form -->
+            <div class="question-block">
+                <label for="q4" class="block text-lg font-semibold text-gray-700 mb-2 text-center">4. 그 외 교육에 대한 <span class="text-blue-600">자유로운 의견</span>을 남겨주세요.</label>
+                <textarea id="q4" name="q4" placeholder="어떤 내용이든 좋습니다. 개선점이나 좋았던 점을 알려주세요." class="w-full p-4 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition h-32"></textarea>
+            </div>
+            
+            <!-- Newsletter Subscription -->
+            <div class="question-block border-t pt-8 mt-8 border-gray-200">
+                <label for="newsletter_agree" class="flex items-center cursor-pointer">
+                    <input id="newsletter_agree" name="newsletter_agree" type="checkbox" class="h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                    <span class="ml-3 block text-md font-medium text-gray-700">데이터 트렌드를 놓치지 않도록 인트렌치 컨설팅의 뉴스레터를 받아보시겠어요?</span>
+                </label>
+                <div id="email_input_wrapper" class="mt-4 hidden transition-all duration-300">
+                    <label for="email" class="block text-sm font-medium text-gray-700 mb-1">뉴스레터를 받을 이메일 주소를 입력해주세요.</label>
+                    <input type="email" id="email" name="email" placeholder="your-email@example.com" class="w-full p-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+                </div>
+            </div>
+        </form>
+
+        <!-- CTA 버튼 -->
+        <div class="text-center mt-12">
+            <button id="submitSurveyBtn" class="w-full bg-blue-600 text-white font-bold py-4 px-8 rounded-lg text-xl shadow-lg hover:bg-blue-700 transition-all transform hover:-translate-y-1 disabled:bg-gray-400 disabled:shadow-none disabled:transform-none">
+                <i class="fas fa-paper-plane mr-2"></i> 설문 제출하기
+            </button>
+            <p id="statusMessage" class="mt-4 text-gray-600 h-6 font-medium"></p>
+        </div>
+    </div>
+
+    <!-- 구글 시트 전송 JavaScript -->
+    <script>
+        const surveyForm = document.getElementById('surveyForm');
+        const submitButton = document.getElementById('submitSurveyBtn');
+        const statusMessage = document.getElementById('statusMessage');
+        const newsletterCheckbox = document.getElementById('newsletter_agree');
+        const emailWrapper = document.getElementById('email_input_wrapper');
+        const emailInput = document.getElementById('email');
+
+        // 🚨 중요: 이 URL은 이전 단계에서 생성한 본인의 웹 앱 URL을 그대로 사용하시면 됩니다.
+        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwTNQtusvTNVRIuROXvdZY02IHUEiOxv0E62A47s3Bs-Yv3HZYI64DwwdN6-i23MJaWXg/exec'; 
+
+        // 뉴스레터 체크박스 클릭 시 이메일 입력란 보이기/숨기기
+        newsletterCheckbox.addEventListener('change', () => {
+            emailWrapper.classList.toggle('hidden');
+        });
+
+        submitButton.addEventListener('click', (e) => {
+            e.preventDefault(); // Form의 기본 제출 동작 방지
+
+            if (WEB_APP_URL.includes('YOUR_WEB_APP_URL')) {
+                statusMessage.textContent = '오류: 스크립트의 WEB_APP_URL을 변경해주세요.';
+                statusMessage.style.color = 'red';
+                return;
+            }
+            
+            // 뉴스레터 구독 시 이메일 유효성 검사
+            if (newsletterCheckbox.checked) {
+                if (!emailInput.value || !/^\S+@\S+\.\S+$/.test(emailInput.value)) {
+                    statusMessage.textContent = '올바른 이메일 주소를 입력해주세요.';
+                    statusMessage.style.color = 'red';
+                    emailInput.focus();
+                    return;
+                }
+            }
+
+            const formData = new FormData(surveyForm);
+            const payload = {};
+            for (let [name, value] of formData.entries()) {
+                payload[name] = value;
+            }
+            payload.newsletter_agree = newsletterCheckbox.checked;
+
+            // 필수 질문 체크
+            if (!payload.q1 || !payload.q2 || !payload.q3) {
+                statusMessage.textContent = '1번부터 3번까지의 질문에 모두 답변해주세요.';
+                statusMessage.style.color = 'red';
+                return;
+            }
+
+            submitButton.disabled = true;
+            statusMessage.textContent = '잠시만 기다려주세요...';
+            statusMessage.style.color = 'blue';
+
+            fetch(WEB_APP_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                cache: 'no-cache',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload),
+            })
+            .then(() => {
+                statusMessage.textContent = '✅ 소중한 의견 감사합니다! 성공적으로 제출되었습니다.';
+                statusMessage.style.color = 'green';
+                surveyForm.reset();
+                emailWrapper.classList.add('hidden');
+            })
+            .catch(error => {
+                console.error('제출 중 오류 발생:', error);
+                statusMessage.textContent = '❌ 제출 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.';
+                statusMessage.style.color = 'red';
+            })
+            .finally(() => {
+                submitButton.disabled = false;
+            });
+        });
+    </script>
+</body>
+</html>
