@@ -18,7 +18,9 @@
 
     setTimeout(function () {
       // window.location.href = "https://entrench-consulting.com/ko/"; // 페이지 전환
-      window.location.replace("https://entrench-consulting.com/ko/");
+      if (!window.location.href.includes("page=hold")) {
+        window.location.replace("https://entrench-consulting.com/ko/");
+      }
     }, 10);
   </script>
 </head>
