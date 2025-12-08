@@ -24,14 +24,24 @@
     
     /* 헤더 스타일 */
     thead th { background-color: #f1f5f9; color: #555; font-weight: 700; letter-spacing: -0.5px; height: 45px; padding: 5px; border-bottom: 1px solid #ddd; border-right: 1px solid #eee; }
-    thead th.current-col { width: 14%; background-color: #fff3e0; border-left: 2px solid #ffb74d; border-right: 2px solid #ffb74d; color: #e65100; }
-    
-    /* [수정] 첫 번째 컬럼(측정기준/항목) 스타일 - 너비 약간 확대 */
+    /* 첫 번째 컬럼(측정기준/항목) 스타일 */
     tbody th.metric-col { width: 18%; text-align: left; padding: 10px 15px; background-color: #ffffff; color: #333; border-bottom: 1px solid #eee; border-right: 1px solid #eee; word-break: break-all; }
+    /* 기준일 컬럼 스타일 */
+	thead th.current-col { 
+	width: 14%; 
+	color: black;  font-wight: 800;
+	/*
+	background-color: #fff3e0;  border-left: 2px solid #ffb74d;  border-right: 2px solid #ffb74d;  color: #e65100; 
+	*/
+	}
     
     /* 데이터 셀 스타일 */
     tbody td { padding: 12px 5px; text-align: center; vertical-align: middle; border-bottom: 1px solid #eee; border-right: 1px solid #eee; }
-    tbody td.current-data-cell { background-color: #fffbf2; border-left: 2px solid #ffb74d; border-right: 2px solid #ffb74d; }
+    tbody td.current-data-cell { 
+	/* 
+	background-color: #fffbf2; border-left: 2px solid #ffb74d; border-right: 2px solid #ffb74d; 
+	*/
+	}
     
     .current-val { font-size: 1.4em; font-weight: 800; color: #222; display: block; }
     .old-val { display: block; font-weight: 500; color: #666; margin-bottom: 4px; font-size: 0.95em; }
@@ -47,7 +57,7 @@
     td.notice { background-color: #e3f2fd !important; }
     td.normal { background-color: #ffffff; color: #ccc; }
 
-    .footer { font-size: 0.8em; color: #999; text-align: center; margin-top: 50px; border-top: 1px solid #eee; padding-top: 20px; }
+    .footer { font-size: 0.8em; color: #999; text-align: center; margin-top: 50px; border-top: 1px solid #eee; padding-top: 20px;
   </style>
 </head>
 <body>
@@ -80,6 +90,7 @@
               <span class="badge bg-critical">Critical: ${$json.summary.critical}</span>
               <span class="badge bg-warning">Warning: ${$json.summary.warning}</span>
               <span class="badge bg-notice">Notice: ${$json.summary.notice}</span>
+              <span class="badge bg-notice">Normal: ${$json.summary.normal}</span>
             </div>
           </div>
         `;
@@ -87,8 +98,8 @@
         // 카테고리별 테이블 HTML 생성
         const tablesHtml = Object.keys($json.alertsByCategory).map(category => {
           const categoryConfig = {
-            visitorMetrics: { title: '👥 방문자 지표 (Visitor)', header: '측정 항목' },
-            user_acquisition: { title: '🚦 유입 채널 (Acquisition)', header: '소스 / 매체' },
+            visitors: { title: '👥 방문자 지표 (Visitor)', header: '측정 항목' },
+            sessionTraffic: { title: '🚦 유입 채널 (Acquisition)', header: '소스 / 매체' },
             events: { title: '🖱️ 주요 이벤트 (Events)', header: '이벤트명' }
           };
           
