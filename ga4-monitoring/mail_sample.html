@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>GA4 데이터 모니터링 리포트</title>
+  <meta charset="utf-8">
+  <style>
+    /* 기본 폰트 및 레이아웃 */
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; line-height: 1.4; color: #333; margin: 0; padding: 0; background-color: #f9f9f9; }
+    .container { max-width: 1000px; margin: 20px auto; padding: 25px; background-color: #ffffff; border: 1px solid #e0e0e0; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+    
+    /* 타이틀 스타일 */
+    h2 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 15px; margin-top: 0; font-size: 1.6em; }
+    h3 { color: #34495e; margin-top: 40px; margin-bottom: 15px; font-size: 1.3em; border-left: 5px solid #3498db; padding-left: 12px; }
+    
+    /* 상단 요약 박스 */
+    .summary-box { background-color: #f1f8ff; padding: 20px; border-radius: 8px; border: 1px solid #d1e3f6; margin-bottom: 30px; }
+    .badge { display: inline-block; padding: 4px 10px; border-radius: 15px; font-size: 0.9em; font-weight: bold; color: white; margin-right: 5px; }
+    .bg-critical { background-color: #e53935; } 
+    .bg-warning { background-color: #fb8c00; } 
+    .bg-notice { background-color: #1e88e5; } 
+
+    /* 테이블 공통 스타일 */
+    table { border-collapse: separate; border-spacing: 0; width: 100%; margin-bottom: 20px; font-size: 0.9em; table-layout: fixed; border: 1px solid #ddd; border-radius: 6px; overflow: hidden; }
+    
+    /* 헤더 스타일 */
+    thead th { background-color: #f1f5f9; color: #555; font-weight: 700; letter-spacing: -0.5px; height: 45px; padding: 5px; border-bottom: 1px solid #ddd; border-right: 1px solid #eee; }
+    thead th.current-col { width: 14%; background-color: #fff3e0; border-left: 2px solid #ffb74d; border-right: 2px solid #ffb74d; color: #e65100; }
+    
+    /* [수정] 첫 번째 컬럼(측정기준/항목) 스타일 - 너비 약간 확대 */
+    tbody th.metric-col { width: 18%; text-align: left; padding: 10px 15px; background-color: #ffffff; color: #333; border-bottom: 1px solid #eee; border-right: 1px solid #eee; word-break: break-all; }
+    
+    /* 데이터 셀 스타일 */
+    tbody td { padding: 12px 5px; text-align: center; vertical-align: middle; border-bottom: 1px solid #eee; border-right: 1px solid #eee; }
+    tbody td.current-data-cell { background-color: #fffbf2; border-left: 2px solid #ffb74d; border-right: 2px solid #ffb74d; }
+    
+    .current-val { font-size: 1.4em; font-weight: 800; color: #222; display: block; }
+    .old-val { display: block; font-weight: 500; color: #666; margin-bottom: 4px; font-size: 0.95em; }
+    .pct { display: block; font-size: 0.9em; font-weight: 800; }
+    
+    .pct.plus { color: #d32f2f; }
+    .pct.minus { color: #1976d2; }
+    .pct.zero { color: #9e9e9e; }
+    .pct.new { color: #e65100; font-weight: 900; }
+    
+    td.critical { background-color: #ffcdd2 !important; }
+    td.warning { background-color: #ffe0b2 !important; }
+    td.notice { background-color: #e3f2fd !important; }
+    td.normal { background-color: #ffffff; color: #ccc; }
+
+    .footer { font-size: 0.8em; color: #999; text-align: center; margin-top: 50px; border-top: 1px solid #eee; padding-top: 20px; }
+  </style>
+</head>
+<body>
+  <div class="container" id="report-container">
+    <p style="text-align:center; padding:50px;">데이터를 불러오는 중입니다...</p>
+  </div>
+
+  <script>
+    // 2. n8n 로직을 브라우저용 자바스크립트로 변환
+    async function renderReport() {
+      try {
+        // sample.json 파일을 가져옵니다.
+        const response = await fetch('./sample.json'); 
+        const data = await response.json();
+        
+        // n8n 변수명($json)을 흉내내어 코드 수정을 최소화합니다.
+        // 만약 sample.json이 배열([...]) 형태라면 data[0]을 사용, 객체라면 data 사용
+        const $json = Array.isArray(data) ? data[0] : data; 
+
+        // ---------------------------------------------------------
+        // 여기서부터는 n8n 로직을 JS Template Literal로 변환한 것입니다.
+        // ---------------------------------------------------------
+        
+        // 요약 배지 HTML 생성
+        const summaryHtml = `
+          <div class="summary-box">
+            <div style="margin-bottom:8px; font-size:1.1em;"><strong>📅 조회 날짜:</strong> ${$json.latestDate}</div>
+            <div style="margin-bottom:12px;"><strong>🏢 계정/속성:</strong> ${$json.gaName.account_name} / ${$json.gaName.property_name}</div>
+            <div>
+              <span class="badge bg-critical">Critical: ${$json.summary.critical}</span>
+              <span class="badge bg-warning">Warning: ${$json.summary.warning}</span>
+              <span class="badge bg-notice">Notice: ${$json.summary.notice}</span>
+            </div>
+          </div>
+        `;
+
+        // 카테고리별 테이블 HTML 생성
+        const tablesHtml = Object.keys($json.alertsByCategory).map(category => {
+          const categoryConfig = {
+            visitorMetrics: { title: '👥 방문자 지표 (Visitor)', header: '측정 항목' },
+            user_acquisition: { title: '🚦 유입 채널 (Acquisition)', header: '소스 / 매체' },
+            events: { title: '🖱️ 주요 이벤트 (Events)', header: '이벤트명' }
+          };
+          
+          const config = categoryConfig[category] || { title: category, header: '구분' };
+          const alerts = $json.alertsByCategory[category];
+          
+          if (!alerts || alerts.length === 0) return '';
+
+          const rows = {};
+          alerts.forEach(a => {
+              const key = a.dimension !== 'total' ? a.dimension : a.metric;
+              if (!rows[key]) {
+                  rows[key] = { currentValue: a.newValue, cells: {} };
+              }
+              rows[key].cells[a.changeType] = a; 
+          });
+
+          const cols = [
+              { key: 'yesterday', label: '전일 대비' },
+              { key: 'sameDayLastWeek', label: '지난주 동요일' },
+              { key: 'avg7', label: '7일 평균' },
+              { key: 'avg14', label: '14일 평균' },
+              { key: 'avg30', label: '30일 평균' }
+          ];
+
+          const tableBody = Object.keys(rows).map(metricName => {
+              const rowData = rows[metricName];
+              const currentValFormatted = rowData.currentValue.toLocaleString();
+
+              const cells = cols.map(col => {
+                  const item = rowData.cells[col.key];
+                  
+                  if (!item) {
+                      return `<td class="normal">-</td>`; 
+                  }
+
+                  let oldValText = item.oldValue.toLocaleString();
+                  let pctHtml = '';
+                  
+                  if (item.changePct >= 99999) {
+                      oldValText = '0';
+                      pctHtml = `<span class="pct new">NEW (+∞)</span>`;
+                  } else if (item.changePct === -100 && item.newValue === 0) {
+                      oldValText = item.oldValue.toLocaleString();
+                      pctHtml = `<span class="pct minus">소실 (-100%)</span>`;
+                  } else {
+                      const sign = item.changePct > 0 ? '+' : '';
+                      const colorClass = item.changePct > 0 ? 'plus' : (item.changePct < 0 ? 'minus' : 'zero');
+                      pctHtml = `<span class="pct ${colorClass}">${sign}${item.changePct}%</span>`;
+                  }
+
+                  return `
+                      <td class="${item.level || ''}">
+                          <span class="old-val">${oldValText}</span>
+                          ${pctHtml}
+                      </td>
+                  `;
+              }).join('');
+
+              return `
+                  <tr>
+                      <th class="metric-col">${metricName}</th>
+                      <td class="current-data-cell">
+                          <span class="current-val">${currentValFormatted}</span>
+                      </td>
+                      ${cells}
+                  </tr>
+              `;
+          }).join('');
+
+          return `
+            <h3>${config.title}</h3>
+            <table>
+              <thead>
+                <tr>
+                  <th style="width:18%; text-align:left; padding-left:15px;">${config.header}</th>
+                  <th class="current-col">기준일 데이터<br><span style="font-size:0.8em; font-weight:normal">(${ $json.latestDate })</span></th>
+                  ${cols.map(c => `<th>${c.label}</th>`).join('')}
+                </tr>
+              </thead>
+              <tbody>
+                ${tableBody}
+              </tbody>
+            </table>
+          `;
+        }).join('');
+
+        // 최종 HTML 조립 및 주입
+        const finalHtml = `
+          <h2>📊 GA4 데일리 모니터링 리포트</h2>
+          ${summaryHtml}
+          ${tablesHtml}
+          <p class="footer">
+            * 본 리포트는 sample.json 데이터를 기반으로 렌더링되었습니다.<br>
+            Test View Mode
+          </p>
+        `;
+
+        document.getElementById('report-container').innerHTML = finalHtml;
+
+      } catch (error) {
+        console.error('Error:', error);
+        document.getElementById('report-container').innerHTML = `
+          <p style="color:red; text-align:center;">
+            데이터를 불러오는데 실패했습니다.<br>
+            1. sample.json 파일이 같은 폴더에 있는지 확인하세요.<br>
+            2. 로컬 파일 실행 시 브라우저 보안(CORS) 문제일 수 있습니다. (Live Server 등을 이용하세요)<br>
+            에러 내용: ${error.message}
+          </p>`;
+      }
+    }
+
+    // 페이지 로드 시 실행
+    renderReport();
+  </script>
+</body>
+</html>
