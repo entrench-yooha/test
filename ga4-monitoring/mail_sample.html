@@ -87,8 +87,8 @@
           <div class="summary-box">
             <div style="margin-bottom:8px; font-size:1.1em;"><strong>📅 조회 날짜:</strong> ${$json.latestDate}</div>
 			<div style="margin-bottom:12px;">
-		        - <strong>계정:</strong> {{$json.gaName.account_name}}({{ $json.gaName.account_id }}) <br>
-		        - <strong>속성:</strong> {{$json.gaName.property_name}}({{ $json.gaName.property_id }}) <br>
+		        - <strong>계정:</strong> ${$json.gaName.account_name}(${$json.gaName.account_id }) <br>
+		        - <strong>속성:</strong> ${$json.gaName.property_name}(${$json.gaName.property_id }) <br>
 		    </div>
             <div>
               <span class="badge bg-critical">Critical: ${$json.summary.critical}</span>
